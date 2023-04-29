@@ -1,3 +1,7 @@
 export enum SceneMessages {
-    Talk = 'talk' 
+    Talk = 'talk',
+    UpdateTime = 'updatetime',
+    DeliverPizza = 'deliverpizza',
+    AddTip = 'tip',
+    LevelComplete = 'levelcomplete'
 }

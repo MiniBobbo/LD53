@@ -16,7 +16,7 @@ export class MMWallJumpFSM extends FSMModule {
         this.mm = this.parent as MM;
         this.timer = 0;
         this.goingUp = true;
-        this.mm.PlayAnimation('jump');
+        this.mm.PlayAnimation('walljump');
     }
 
     update(dt:number) {
@@ -45,7 +45,7 @@ export class MMWallJumpFSM extends FSMModule {
         // }
 
 
-        if(input.IsPressed(IHVI.Jump) && !this.mm.sprite.body.blocked.up && this.timer < this.jumpTime) {
+        if(this.timer < C.WALL_JUMP_TIME_MIN || (input.IsPressed(IHVI.Jump) && !this.mm.sprite.body.blocked.up && this.timer < this.jumpTime)) {
             this.timer += dt;
             this.mm.sprite.setVelocityY(-C.JUMP_STRENGTH);
         } else {

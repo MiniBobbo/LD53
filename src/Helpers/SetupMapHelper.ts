@@ -8,6 +8,7 @@ import { LevelScene } from "../scenes/LevelScene";
 import { EntityInstance, LDtkMapPack } from "../Map/LDtkReader";
 import { Entity } from "../Entities/Entity";
 import { Powerup } from "../Entities/Powerup";
+import { Customer } from "../Entities/Customer";
 
 export class SetupMapHelper {
     static CurrentCollider:Phaser.Physics.Arcade.Collider;
@@ -38,7 +39,12 @@ export class SetupMapHelper {
         maps.entityLayers.entityInstances.forEach(element => {
             let worldposition = {x:element.px[0] + maps.worldX, y:element.px[1] + maps.worldY};
             switch (element.__identifier) {
-
+                case 'Customer':
+                    let cust = new Customer(gs);
+                    cust.sprite.setPosition(worldposition.x, worldposition.y);
+                    gs.TotalCustomers++;
+                    // mo.mapEntities.push(cust);
+                break;
                 case 'Text':
                         let message = element.fieldInstances[0];
                         let t = gs.add.bitmapText(worldposition.x, worldposition.y, '8px', message.__value as string)

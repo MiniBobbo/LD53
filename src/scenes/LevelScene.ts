@@ -1,3 +1,4 @@
+import { Scene } from "phaser";
 import { BaseAttack } from "../attacks/BaseAttack";
 import { EnemyAttack } from "../attacks/EnemyAttacks";
 import { AI } from "../attacks/playerattacks/AI";
@@ -8,6 +9,9 @@ import { MM } from "../Entities/MM";
 import { AttackMessages } from "../enums/AttackMessages";
 import { EffectTypes } from "../enums/EffectTypes";
 import { EntityMessages } from "../enums/EntityMessages";
+import { SceneMessages } from "../enums/SceneMessages";
+import { LevelTimer } from "../gui/LevelTimer";
+import { Tips } from "../gui/Tips";
 import { SetupMapHelper } from "../Helpers/SetupMapHelper";
 import { IH, IHVI } from "../IH/IH";
 import { LDtkMapPack, LdtkReader, Level } from "../Map/LDtkReader";
@@ -31,10 +35,9 @@ export class LevelScene extends Phaser.Scene {
     NextMapObjects:MapObjects;
     MapObjects:Array<MapObjects>;
 
-    checkpointEmitter:Phaser.GameObjects.Particles.ParticleEmitter;
-
     Paused:boolean = false;
 
+  
 
     BG:Phaser.GameObjects.TileSprite;
 
@@ -53,9 +56,13 @@ export class LevelScene extends Phaser.Scene {
 
     debug:Phaser.GameObjects.Text;
 
+    //Game Specific Stuff
+    TotalCustomers:number = 0;
+    LevelComplete:boolean = false;
+    LevelTimer:number = 0;
 
 
-    create(levelData:{levelName:string}) {
+    create(data:{LevelName:string}) {
         this.CollideMap = this.physics.add.group();
         this.CollidePlayer = this.physics.add.group();
         this.CollideEnemy = this.physics.add.group();
@@ -71,8 +78,8 @@ export class LevelScene extends Phaser.Scene {
         this.Midground = this.add.layer().setDepth(3);
         this.Background = this.add.layer().setDepth(2);
 
-        this.BG = this.add.tileSprite(0,0, 240,240,'bgs').setScrollFactor(0,0).setOrigin(0,0);
-        this.Background.add(this.BG);
+        // this.BG = this.add.tileSprite(0,0, 240,240,'bgs').setScrollFactor(0,0).setOrigin(0,0);
+        // this.Background.add(this.BG);
 
 
         this.reader = new LdtkReader(this,this.cache.json.get('start'));
@@ -85,8 +92,12 @@ export class LevelScene extends Phaser.Scene {
         this.ih = new IH(this);
 
         this.debug = this.add.text(0,0,"").setFontSize(10).setDepth(1000).setScrollFactor(0,0);
+        let m:LDtkMapPack;
+        if(data.LevelName == null || data.LevelName == '')
+            m = this.reader.CreateMap('Level_0', 'tiles');
+        else
+        m = this.reader.CreateMap(data.LevelName, 'tiles');
 
-        let m = this.reader.CreateMap(C.gd.CurrentLevel, 'faketiles');
         this.currentMap = m.level.identifier;
         m.collideLayer.setCollision([1, 2, 3, 4, 5, 6]);
         this.currentMapPack = m;
@@ -158,6 +169,8 @@ export class LevelScene extends Phaser.Scene {
         });
 
         //Add gui stuff
+        this.GuiLayer.add(new LevelTimer(this).t);
+        this.GuiLayer.add(new Tips(this).t);
 
         this.CreateEvents();
         //Debug stuff
@@ -179,6 +192,8 @@ export class LevelScene extends Phaser.Scene {
                 return;
         }
 
+        this.LevelTimer += dt;
+        this.events.emit(SceneMessages.UpdateTime, this.LevelTimer/1000);
 
         if(this.ih.IsJustPressed(IHVI.Pause)) {
             if(this.physics.world.isPaused)
@@ -194,22 +209,31 @@ export class LevelScene extends Phaser.Scene {
 
         }
 
-        if(this.mm.sprite.x < this.currentMapPack.worldX) {
-            this.TransitionMap('w');
-        } else if (this.mm.sprite.x > this.currentMapPack.worldX + this.currentMapPack.width) {
-            this.TransitionMap('e');
-        } else if (this.mm.sprite.y > this.currentMapPack.worldY + this.currentMapPack.height) {
-            this.TransitionMap('s');
-        } else if (this.mm.sprite.y < this.currentMapPack.worldY) {
-            this.TransitionMap('n');
-        }
+        this.events.on(SceneMessages.DeliverPizza, this.DeliveredPizza, this);
 
         this.physics.collide(this.CollideMap, this.currentMapPack.collideLayer);
-        let bounds = this.cameras.main.getBounds();
+        // let bounds = this.cameras.main.getBounds();
 
-        this.BG.tilePositionX = this.cameras.main.scrollX * .2;
+        //End the level if we delivered all the pizzas.
+
 
     }
+    DeliveredPizza() {
+        this.TotalCustomers--;
+        if(!this.LevelComplete && this.TotalCustomers <= 0) {
+            this.LevelCompleted();
+        }
+        
+    }
+
+    LevelCompleted(){
+        this.LevelComplete = true;
+        this.events.emit(SceneMessages.LevelComplete);
+        console.log('Level Complete!');
+
+        
+    }
+
     TryToContinue() {
         throw new Error("Method not implemented.");
     }
@@ -284,7 +308,7 @@ export class LevelScene extends Phaser.Scene {
 
 
     CreateNextMap(nLevel:Level) {
-        this.nextMapPack = this.reader.CreateMap(nLevel.identifier, 'faketiles');
+        this.nextMapPack = this.reader.CreateMap(nLevel.identifier, 'tiles');
         // if(this.currentMapCollider != null)
         //     this.currentMapCollider.destroy();
         this.physics.world.setBounds(this.nextMapPack.worldX, this.nextMapPack.worldY, this.nextMapPack.width, this.nextMapPack.height);

@@ -1,4 +1,6 @@
 import { C } from "../C";
+import { Customer } from "../Entities/Customer";
+import { MM } from "../Entities/MM";
 import { GameData } from "../GameData";
 import { GamepadButtons, IH, IHVI } from "../IH/IH";
 
@@ -65,17 +67,13 @@ export class Preload extends Phaser.Scene {
         }, this);
     
         this.load.setBaseURL('./assets/')
-        this.load.bitmapFont('dwf', 'dwarf_0.png', 'dwarf.fnt');
         this.load.bitmapFont('6px', 'munro_0.png', 'munro.fnt');
         this.load.bitmapFont('8px', 'smallfont_0.png', 'smallfont.fnt');
         this.load.image('box', '9box.png');
+        this.load.image('tiles', 'Tiles.png');
         // this.load.bitmapFont('8px', '8ptfont_0.png', '8ptfont.fnt');
         this.load.multiatlas('atlas', 'atlas.json');
         this.load.json('start', 'start.ldtk');
-        this.load.image('mapts', 'slopes.png');
-        this.load.image('bgs', 'bgs_1.png');
-        this.load.image('faketiles', 'slopes.png');
-        this.load.spritesheet('hearts', 'Hearts.png', {frameWidth:12, frameHeight:12});
     }
 
 
@@ -83,10 +81,13 @@ export class Preload extends Phaser.Scene {
         C.gd = new GameData();
 
         //Effects
-        this.anims.create({ key: 'effect_footstep', frameRate: 20, frames: this.anims.generateFrameNames('atlas', { prefix: 'effects_footstep_', end: 4}), repeat: 0});
-        this.anims.create({ key: 'pink', frameRate: 60, frames: this.anims.generateFrameNames('atlas', { prefix: 'effects_pink_', end: 4}), repeat: 0});
-        this.anims.create({ key: 'poof', frameRate: 60, frames: this.anims.generateFrameNames('atlas', { prefix: 'poof_', end: 53}), repeat: 0});
-        this.anims.create({ key: 'explode', frameRate: 60, frames: this.anims.generateFrameNames('atlas', { prefix: 'explode_', end: 18}), repeat: 0});
+        // this.anims.create({ key: 'effect_footstep', frameRate: 20, frames: this.anims.generateFrameNames('atlas', { prefix: 'effects_footstep_', end: 4}), repeat: 0});
+        // this.anims.create({ key: 'pink', frameRate: 60, frames: this.anims.generateFrameNames('atlas', { prefix: 'effects_pink_', end: 4}), repeat: 0});
+        // this.anims.create({ key: 'poof', frameRate: 60, frames: this.anims.generateFrameNames('atlas', { prefix: 'poof_', end: 53}), repeat: 0});
+        // this.anims.create({ key: 'explode', frameRate: 60, frames: this.anims.generateFrameNames('atlas', { prefix: 'explode_', end: 18}), repeat: 0});
+
+        MM.CreateAnims(this);
+        Customer.CreateAnims(this);
 
         IH.AddVirtualInput(IHVI.Up);
         IH.AddVirtualInput(IHVI.Down);

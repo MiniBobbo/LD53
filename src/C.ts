@@ -8,16 +8,17 @@ export class C {
 
 
     //Game Default Values
-    static GRAVITY:number = 200;
-    static WALL_DOWNSPEED:number = 100;
+    static GRAVITY:number = 400;
+    static WALL_DOWNSPEED:number = 200;
     static DRAG:number = 1000;
-    static JUMP_STRENGTH:number = 100;
-    static Wall_JUMP_STRENGTH_X:number = 100;
-    static JUMP_TIME:number = 250;
-    static WALL_JUMP_TIME:number = 250;
+    static JUMP_STRENGTH:number = 200;
+    static Wall_JUMP_STRENGTH_X:number = 180;
+    static JUMP_TIME:number = 300;
+    static WALL_JUMP_TIME:number = 300;
+    static WALL_JUMP_TIME_MIN:number = 300;
     static GRAVITY_MULT = 2;
-    static MOVE_SPEED:number = 100;
-    static MOVE_ACCEL:number = 500;
+    static MOVE_SPEED:number = 150;
+    static MOVE_ACCEL:number = 800;
     static SCREEN_TRANSITION_TIME:number = 500;
     static LONG_FLASH:number = 1500;
     static SHORT_FLASH:number = 200;

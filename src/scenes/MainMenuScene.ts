@@ -24,7 +24,7 @@ export class MainMenuScene extends Phaser.Scene {
         this.StartButton = this.CreateButton('Start Game', this.StartGame).setPosition(30,50);
         this.EraseButton = this.CreateButton('Erase Saved Data', this.EraseSaves).setPosition(200,200);
 
-        this.add.nineslice(20,20, 'box', null, 100,100,10,10,10,10).setOrigin(0,0);
+        // this.add.nineslice(20,20, 'box', null, 100,100,10,10,10,10).setOrigin(0,0);
 
     }
 
@@ -32,9 +32,10 @@ export class MainMenuScene extends Phaser.Scene {
         console.log('Start Button pressed');
         this.input.removeAllListeners();
         this.cameras.main.fadeOut(1000, 0,0,0);
-        this.scene.add('level', LevelScene, false);
+        // this.scene.add('level', LevelScene, false);
         this.cameras.main.once('camerafadeoutcomplete', () =>{ 
-            this.scene.start('level', {levelName:'levels'});
+            this.scene.start('level');
+            // this.scene.start('level', {LevelName:'Level_0'});
             // this.scene.start('level', 'test');
         })
     }

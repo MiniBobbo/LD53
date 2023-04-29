@@ -24,10 +24,10 @@ export class MM extends Entity {
     private attackCooldown:number = 0;
     constructor(scene:LevelScene, ih:IH) {
         super(scene);
-        this.sprite.setSize(12,11);
+        this.sprite.setSize(20,34);
         // this.hp = this.maxhp = 10;
         this.ih = ih;
-        this.sprite.setName('dwarf');
+        this.sprite.setName('player');
         this.PlayAnimation('stand');
         // this.sprite.setGravityY(100);
         this.fsm.addModule('nothing', new MMNothingFSM(this, this.fsm));
@@ -104,7 +104,12 @@ export class MM extends Entity {
         return [belowtile, currentTile];
     }
     static CreateAnims(scene:Phaser.Scene) {
-        
+        scene.anims.create({ key: 'player_stand', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_stand_', end: 0}), repeat: 0});
+        scene.anims.create({ key: 'player_run', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_run_', end: 0}), repeat: 0});
+        scene.anims.create({ key: 'player_jump', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_jumpup_', end: 0}), repeat: 0});
+        scene.anims.create({ key: 'player_jumpdown', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_jumpdown_', end: 0}), repeat: 0});
+        scene.anims.create({ key: 'player_wall', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_wall_', end: 0}), repeat: 0});
+        scene.anims.create({ key: 'player_walljump', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_walljump_', end: 0}), repeat: 0});
     }
 
 }
