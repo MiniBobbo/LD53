@@ -1,7 +1,13 @@
 export enum SceneMessages {
+    //LevelScene
     Talk = 'talk',
     UpdateTime = 'updatetime',
     DeliverPizza = 'deliverpizza',
     AddTip = 'tip',
-    LevelComplete = 'levelcomplete'
+    LevelComplete = 'levelcomplete',
+
+    //MenuScene
+    LevelSelected = 'levelselected',
+    EnableButttons = 'enablebuttons',
+    DisableButttons = 'disablebuttons',
 }

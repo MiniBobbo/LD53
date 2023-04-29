@@ -1,8 +1,9 @@
 import { C } from "./C";
+import { LevelData } from "./Models/LevelData";
 
 export class GameData {
-    CurrentLevel:string = 'Level_0';
-
+    Levels:LevelData[];
     constructor() {
+        
     }
 }

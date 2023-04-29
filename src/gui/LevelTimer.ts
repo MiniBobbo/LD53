@@ -15,7 +15,7 @@ export class LevelTimer {
 
     UpdateTime(newTime:number) {
         this.currentTime = newTime;
-        this.t.setText(Phaser.Math.RoundTo(this.currentTime, -1) + "");
+        this.t.setText(Phaser.Math.RoundTo(this.currentTime, 0) + "");
     }
 
 }

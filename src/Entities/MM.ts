@@ -2,6 +2,7 @@ import { AI } from "../attacks/playerattacks/AI";
 import { C } from "../C";
 import { AttackTypes } from "../enums/AttackTypes";
 import { EntityMessages } from "../enums/EntityMessages";
+import { SceneMessages } from "../enums/SceneMessages";
 import { MMFallFSM } from "../FSM/PlayerFSM/MMFallFSM";
 import { MMGroundFSM } from "../FSM/PlayerFSM/MMGroundFSM";
 import { MMJumpFSM } from "../FSM/PlayerFSM/MMJumpFSM";
@@ -44,12 +45,18 @@ export class MM extends Entity {
         this.scene.Players.add(this.sprite);
 
         this.sprite.on(EntityMessages.TRY_ATTACK, this.TryAttack, this);
+        this.scene.events.on(SceneMessages.LevelComplete, this.LevelCompleted, this);
         this.sprite.setDepth(100);
         // this.scene.events.on('update', this.update, this);
 
         // if(C.checkFlag('light')) {
         //     this.TurnOnLight();
         // }
+    }
+
+    LevelCompleted() {
+        this.PlayAnimation('win');
+        this.changeFSM('nothing');
     }
 
 
@@ -110,6 +117,7 @@ export class MM extends Entity {
         scene.anims.create({ key: 'player_jumpdown', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_jumpdown_', end: 0}), repeat: 0});
         scene.anims.create({ key: 'player_wall', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_wall_', end: 0}), repeat: 0});
         scene.anims.create({ key: 'player_walljump', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_walljump_', end: 0}), repeat: 0});
+        scene.anims.create({ key: 'player_win', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_win_', end: 0}), repeat: 0});
     }
 
 }
