@@ -10,21 +10,23 @@ export class LevelIcons {
     //Graphics stuff
     c:Phaser.GameObjects.Container;
     t:Phaser.GameObjects.BitmapText;
+    tip:Phaser.GameObjects.BitmapText;
     IconLocation:Phaser.Math.Vector2;
     o:Phaser.GameObjects.NineSlice;
 
-    private width:number = 100;
-    private height:number = 30;
+    private width:number = 140;
+    private height:number = 26;
 
 
     constructor(scene:Phaser.Scene) {
         this.scene = scene;
         this.c = scene.add.container(0,0).setSize(40,40);
-        this.t = scene.add.bitmapText(4,4,'emu','test');
+        this.t = scene.add.bitmapText(5,3,'pixel','test').setMaxWidth(88);
+        this.tip = scene.add.bitmapText(94,5,'pixel','$0').setScale(1.5);
         this.o = scene.add.nineslice(0,0,'atlas', 'outsidebar', this.width, this.height, 4,4, 4,5).setOrigin(0,0);
         this.c.add(this.o);
         this.c.add(this.t);
-
+        this.c.add(this.tip);
 
         this.IconLocation = new Phaser.Math.Vector2();
 
@@ -40,7 +42,7 @@ export class LevelIcons {
 
     SetPosition(x:number, y:number) {
         this.c.setPosition(x,y);
-        this.IconLocation.set(x - 14, y + 6);
+        this.IconLocation.set(x - 14, y + 10);
     }
     
 
@@ -53,7 +55,8 @@ export class LevelIcons {
         this.Complete = complete;
         this.LevelID = ID;
         this.Tip = tip;
-        this.t.setText(`${this.LevelName}\n\s$${this.Tip}`);
+        this.t.setText(`${this.LevelName}`);
+        this.tip.setText(`$${this.Tip}`);
         if(this.Complete)
             this.t.setTint(0x00ffff);
         if(complete)

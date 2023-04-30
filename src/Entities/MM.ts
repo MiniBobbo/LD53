@@ -3,6 +3,7 @@ import { C } from "../C";
 import { AttackTypes } from "../enums/AttackTypes";
 import { EntityMessages } from "../enums/EntityMessages";
 import { SceneMessages } from "../enums/SceneMessages";
+import { MMDeadFSM } from "../FSM/PlayerFSM/MMDeadFSM";
 import { MMFallFSM } from "../FSM/PlayerFSM/MMFallFSM";
 import { MMGroundFSM } from "../FSM/PlayerFSM/MMGroundFSM";
 import { MMJumpFSM } from "../FSM/PlayerFSM/MMJumpFSM";
@@ -20,18 +21,19 @@ export class MM extends Entity {
     Light:Phaser.GameObjects.Light;
     LightTween:Phaser.Tweens.Tween;
 
-
+    IsDead:boolean = false;
     
     private attackCooldown:number = 0;
     constructor(scene:LevelScene, ih:IH) {
         super(scene);
-        this.sprite.setSize(20,34);
+        this.sprite.setSize(10,18);
         // this.hp = this.maxhp = 10;
         this.ih = ih;
-        this.sprite.setName('player');
+        this.sprite.setName('player_small');
         this.PlayAnimation('stand');
         // this.sprite.setGravityY(100);
         this.fsm.addModule('nothing', new MMNothingFSM(this, this.fsm));
+        this.fsm.addModule('dead', new MMDeadFSM(this, this.fsm));
         this.fsm.addModule('move', new MMGroundFSM(this, this.fsm));
         this.fsm.addModule('jump', new MMJumpFSM(this, this.fsm));
         this.fsm.addModule('walljump', new MMWallJumpFSM(this, this.fsm));
@@ -56,7 +58,7 @@ export class MM extends Entity {
 
     LevelCompleted() {
         this.PlayAnimation('win');
-        this.changeFSM('nothing');
+        this.changeFSM('dead');
     }
 
 
@@ -66,20 +68,9 @@ export class MM extends Entity {
         this.sprite.emit(EntityMessages.TAKE_DAMAGE, a.damage);
     }
 
-    Damage(damage: number, type:AttackTypes): void {
-        if(this.flashing)
-            return;
-        this.fsm.changeModule('knockback');    
-        this.scene.cameras.main.shake(100,.02);    
-        super.Damage(damage, type);
-        if(this.hp <=0) {
-            // this.gs.physics.pause();
-            this.gs.events.emit(EntityMessages.PLAYER_DEAD);
-        }
-    }
 
     changeFSM(nextFSM:string) {
-        // console.log(`Changing to ${nextFSM}`);
+        console.log(`Changing to ${nextFSM}`);
         this.fsm.changeModule(nextFSM);
     }
 
@@ -95,7 +86,24 @@ export class MM extends Entity {
 
     }
 
+    PlayAnimation(anim: string, ignoreIfPlaying?: boolean): void {
+        super.PlayAnimation(anim, ignoreIfPlaying);
+        console.log(`Changing to ${anim}`);
+
+    }
+
+    Dead() {
+        this.sprite.body.enable = false;
+        this.IsDead = true;
+        // this.sprite.setVisible(false);
+        this.changeFSM('dead');
+    }
+
+
     Update(time:number, dt:number) {
+        if(this.sprite.y > this.gs.currentMapPack.worldY + this.gs.currentMapPack.height && !this.IsDead) {
+            this.Dead();
+        }
         super.Update(time, dt);
         this.sprite.flipX = this.Facing == FacingEnum.Left;
         if(this.sprite.body != null)
@@ -111,13 +119,15 @@ export class MM extends Entity {
         return [belowtile, currentTile];
     }
     static CreateAnims(scene:Phaser.Scene) {
-        scene.anims.create({ key: 'player_stand', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_stand_', end: 0}), repeat: 0});
-        scene.anims.create({ key: 'player_run', frameRate: 12, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_run_', end: 7}), repeat: -1});
-        scene.anims.create({ key: 'player_jump', frameRate: 12, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_jumpup_', end: 2}), repeat: 0});
-        scene.anims.create({ key: 'player_jumpdown', frameRate: 12, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_jumpdown_', end: 2}), repeat: 0});
-        scene.anims.create({ key: 'player_wall', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_wall_', end: 0}), repeat: 0});
-        scene.anims.create({ key: 'player_walljump', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_walljump_', end: 0}), repeat: 0});
-        scene.anims.create({ key: 'player_win', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_win_', end: 0}), repeat: 0});
+        scene.anims.create({ key: 'player_small_stand', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_small_stand_', end: 0}), repeat: 0});
+        scene.anims.create({ key: 'player_small_run', frameRate: 12, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_small_run_', end: 7}), repeat: -1});
+        scene.anims.create({ key: 'player_small_jump', frameRate: 12, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_small_jumpup_', end: 2}), repeat: 0});
+        scene.anims.create({ key: 'player_small_jumpdown', frameRate: 12, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_small_jumpdown_', end: 2}), repeat: 0});
+        scene.anims.create({ key: 'player_small_wall', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_small_wall_', end: 0}), repeat: 0});
+        scene.anims.create({ key: 'player_small_walljump', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_small_walljump_', end: 0}), repeat: 0});
+        scene.anims.create({ key: 'player_small_win', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_small_win_', end: 0}), repeat: 0});
+        scene.anims.create({ key: 'player_small_dead', frameRate: 20, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_small_explode', zeroPad:3, end: 59}), repeat: 0});
+        scene.anims.create({ key: 'player_small_appear', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_small_appear', zeroPad:3, end: 59}), repeat: 0});
     }
 
 }

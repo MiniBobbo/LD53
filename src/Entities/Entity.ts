@@ -39,7 +39,7 @@ export class Entity {
         this.sprite.setPipeline('Light2D');
         
 
-        this.sprite.on(EntityMessages.TAKE_DAMAGE, this.Damage, this);
+        this.sprite.on(EntityMessages.TAKE_DAMAGE, this.Dead, this);
         this.sprite.on('stun', this.Stun, this);
         this.sprite.on('dead', this.Dead, this);
         this.sprite.on(EntityMessages.HIT_BY_ATTACK, this.HitByAttack, this);
@@ -126,17 +126,6 @@ export class Entity {
         this.lastAnim = combinedAnim;
     }
 
-    Damage(damage:number, type:AttackTypes): void {
-        if(this.flashing)
-            return;
-        this.Flash(C.LONG_FLASH);
-        this.hp -= damage;
-        this.hp = Phaser.Math.Clamp(this.hp, 0, this.maxhp);
-        this.sprite.emit(EntityMessages.CHANGE_HP, this.hp, this.maxhp);
-        if(this.hp == 0) {
-            this.sprite.emit('dead');
-        }
-    }
 
     Dead() {
         this.sprite.body.enable = false;

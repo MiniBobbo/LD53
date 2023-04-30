@@ -7,6 +7,7 @@ export enum SceneMessages {
     AddTip = 'tip',
     LevelComplete = 'levelcomplete',
     ReheatPizza = 'reheat',
+    RespawnPlayer='respawn',
 
     //MenuScene
     LevelSelected = 'levelselected',

@@ -10,7 +10,7 @@ export class Customer extends Entity {
 
     constructor(scene:LevelScene) {
         super(scene);
-        this.sprite.setSize(34, 34);
+        this.sprite.setSize(20, 20);
         this.sprite.setName('customer');
         this.PlayAnimation('stand');
         

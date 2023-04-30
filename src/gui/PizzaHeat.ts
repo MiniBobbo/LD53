@@ -24,7 +24,7 @@ export class PizzaHeat {
         scene.events.on(SceneMessages.ReheatPizza, ()=>{this.currentTime = C.PIZZA_HEAT_TIME}, this);
         this.c.add(outside);
         this.c.add(this.inside);
-        this.t = scene.add.bitmapText(190, 8, 'emu', '').setTint(0x0000ff);
+        this.t = scene.add.bitmapText(190, 8, 'pixel', '').setTint(0x0000ff);
         this.c.add(this.t);
         
     }

@@ -1,6 +1,7 @@
 import { C } from "../C";
 import { Customer } from "../Entities/Customer";
 import { MM } from "../Entities/MM";
+import { Truck } from "../Entities/Truck";
 import { GameData } from "../GameData";
 import { GamepadButtons, IH, IHVI } from "../IH/IH";
 
@@ -67,15 +68,15 @@ export class Preload extends Phaser.Scene {
         }, this);
     
         this.load.setBaseURL('./assets/')
-        this.load.bitmapFont('emu', '8ptfont_0.png', '8ptfont.fnt');
-        this.load.bitmapFont('6px', 'munro_0.png', 'munro.fnt');
-        this.load.bitmapFont('small', 'smallfont_0.png', 'smallfont.fnt');
+        this.load.bitmapFont('pixel', 'fonts/5px_0.png', 'fonts/5px.fnt');
         this.load.image('box', '9box.png');
         this.load.image('tiles', 'Tiles.png');
+        this.load.image('tiles_small', 'tiles_small.png');
         this.load.image('pizza', 'bigpizza.png');
         // this.load.bitmapFont('8px', '8ptfont_0.png', '8ptfont.fnt');
         this.load.multiatlas('atlas', 'atlas.json');
         this.load.json('start', 'start.ldtk');
+        this.load.json('startsmall', 'startsmall.ldtk');
     }
 
 
@@ -90,6 +91,9 @@ export class Preload extends Phaser.Scene {
 
         MM.CreateAnims(this);
         Customer.CreateAnims(this);
+        Truck.CreateAnims(this);
+        this.anims.create({ key: 'truck_drive', frameRate: 20, frames: this.anims.generateFrameNames('atlas', { prefix: 'pizza truck_drive_', end: 2}), repeat: -1});
+
 
         IH.AddVirtualInput(IHVI.Up);
         IH.AddVirtualInput(IHVI.Down);

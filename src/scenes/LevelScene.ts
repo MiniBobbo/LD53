@@ -39,6 +39,8 @@ export class LevelScene extends Phaser.Scene {
 
     Paused:boolean = false;
 
+    RespawnPoint:Phaser.Math.Vector2 = new Phaser.Math.Vector2();
+
     BG:Phaser.GameObjects.TileSprite;
 
     GuiLayer:Phaser.GameObjects.Layer;
@@ -84,7 +86,7 @@ export class LevelScene extends Phaser.Scene {
         this.Midground = this.add.layer().setDepth(3);
         this.Background = this.add.layer().setDepth(2);
 
-        this.reader = new LdtkReader(this,this.cache.json.get('start'));
+        this.reader = new LdtkReader(this,this.cache.json.get(C.LDTK_NAME));
 
         this.cam = this.add.image(0,0,'atlas').setVisible(false);
 
@@ -96,9 +98,9 @@ export class LevelScene extends Phaser.Scene {
         this.debug = this.add.text(0,0,"").setFontSize(10).setDepth(1000).setScrollFactor(0,0);
         let m:LDtkMapPack;
         if(data.LevelName == null || data.LevelName == '')
-            m = this.reader.CreateMap('Level_0', 'tiles');
+            m = this.reader.CreateMap('Level_0', 'tiles_small');
         else
-        m = this.reader.CreateMap(data.LevelName, 'tiles');
+        m = this.reader.CreateMap(data.LevelName, 'tiles_small');
 
         this.currentMap = m.level.identifier;
         m.collideLayer.setCollision([1, 2, 3, 4, 5, 6]);
@@ -275,12 +277,26 @@ export class LevelScene extends Phaser.Scene {
         this.customEvents.push('debug');
         this.events.on('effect', (origin:{x:number, y:number, right:boolean}, type:EffectTypes)=> {this.EM.LaunchEffect(origin, type);});
         this.customEvents.push('effect');
-        this.events.on(EntityMessages.PLAYER_DEAD, this.PlayerDead, this);
+        this.events.on(SceneMessages.RespawnPlayer, this.PlayerRespawn, this);
         this.events.on(SceneMessages.DeliverPizza, this.DeliveredPizza, this);
         this.events.on(SceneMessages.SetTipMult, (tip:number) => {
             tip = Phaser.Math.RoundTo(tip, -2);
             this.PizzaHeatTipMultiplier = tip; 
             this.TipText.text = tip + "";}, this);
+
+    }
+    PlayerRespawn() {
+        this.mm.sprite.setPosition(this.RespawnPoint.x, this.RespawnPoint.y);
+        this.mm.PlayAnimation('appear');
+        this.cameras.main.flash();
+        let timeline = this.mm.scene.add.timeline([
+            {
+                at:500,
+                run: () => {this.mm.changeFSM('fall'); this.mm.PlayAnimation('jumpdown');}
+            }
+
+        ]);
+        timeline.play();
 
     }
 
@@ -297,22 +313,6 @@ export class LevelScene extends Phaser.Scene {
     RemoveEvents() {
         this.customEvents.forEach(element => {
             this.events.removeListener(element);
-        });
-    }
-
-    PlayerDead() {
-        this.cameras.main.fadeOut(2000, 0,0,0,(cam:any, progress)=>{
-            if(progress==1){
-
-            }
-        
-        },this);
-
-        this.time.addEvent({
-            delay:2100,
-            callbackScope:this,
-            callback:()=>{this.cameras.main.fadeIn(1000);}
-
         });
     }
 

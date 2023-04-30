@@ -12,7 +12,7 @@ export class LevelTimer {
     inside:Phaser.GameObjects.NineSlice;
 
     constructor(scene:Phaser.Scene) {
-        this.t = scene.add.bitmapText(10,12, 'emu', '0').setScrollFactor(0,0);
+        this.t = scene.add.bitmapText(10,12, 'pixel', '0').setScrollFactor(0,0);
         scene.events.on(SceneMessages.UpdateTime, this.UpdateTime, this);
         scene.events.on(SceneMessages.LevelComplete, ()=>{this.complete = true;}, this);
 

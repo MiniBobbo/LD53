@@ -42,16 +42,5 @@ export class Enemy extends Entity {
             this.scene.mm.sprite.emit(EntityMessages.TAKE_DAMAGE, this.CollideDamage);
     }
 
-    Damage(damage:number, type:AttackTypes): void {
-        if(this.flashing)
-            return;
-        this.Flash(C.SHORT_FLASH);
-        this.hp -= damage;
-        this.hp = Phaser.Math.Clamp(this.hp, 0, this.maxhp);
-        this.sprite.emit(EntityMessages.CHANGE_HP, this.hp, this.maxhp);
-        if(this.hp == 0) {
-            this.sprite.emit('dead');
-        }
-    }
 
 }

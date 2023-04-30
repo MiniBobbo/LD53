@@ -26,9 +26,11 @@ export class MainMenuScene extends Phaser.Scene {
             this.Init();
         this.scene.remove('level');
         let ts = this.add.tileSprite(0,0,400,240,'atlas', 'skybg_0').setOrigin(0,0);
-        this.events.on('update', ()=>{ts.tilePositionX -= 1}, this);
-        this.add.image(0,0,'atlas', 'MainBG').setOrigin(0,0);
-        this.add.image(200,60, 'atlas', 'pizzalogo');
+        let road = this.add.tileSprite(0,200,400,40,'atlas', 'Road').setOrigin(0,0);
+        let truck = this.add.sprite(85, 170, 'atlas', '').play('truck_drive');
+        this.events.on('update', ()=>{ts.tilePositionX -= 1;  road.tilePositionX += 5;}, this);
+        // this.add.image(0,0,'atlas', 'MainBG').setOrigin(0,0);
+        this.add.image(0,0, 'atlas', 'pizzalogo').setOrigin(0,0);
 
 
         // this.add.nineslice(20,20, 'box', null, 100,100,10,10,10,10).setOrigin(0,0);
@@ -41,7 +43,7 @@ export class MainMenuScene extends Phaser.Scene {
         // this.cameras.main.setBackgroundColor(0xff00ff);
 
         // this.StartButton = this.CreateButton('Start Game', this.StartGame).setPosition(30,50);
-        this.EraseButton = this.CreateButton('Clear\nSaved Data', this.EraseSaves).setPosition(340,220);
+        this.EraseButton = this.CreateButton('Clear\nSaved Data', this.EraseSaves).setPosition(5,220);
 
 
         this.CreateLevels();
@@ -61,7 +63,7 @@ export class MainMenuScene extends Phaser.Scene {
         gd.Levels.forEach(element => {
             let li = new LevelIcons(this);
             li.SetData(element.LevelName, element.LevelID, element.Complete, element.Tip);
-            li.SetPosition(30, 60 + 30*count);
+            li.SetPosition(240, 5 + 30*count);
             this.Levels.push(li);
             count++;
         });
@@ -125,7 +127,7 @@ export class MainMenuScene extends Phaser.Scene {
 
     CreateButton(text:string, callback:any):Phaser.GameObjects.Container {
         let c = this.add.container();
-        let t = this.add.bitmapText(0,0,'small', text).setInteractive().setCenterAlign().setTint(0xff0000);
+        let t = this.add.bitmapText(0,0,'pixel', text).setInteractive().setCenterAlign().setTint(0xff0000);
         t.on('pointerdown', callback, this);
         c.add(t);
         return c;
@@ -134,7 +136,7 @@ export class MainMenuScene extends Phaser.Scene {
     CreateGameData() {
         let gd = new GameData();
 
-        let reader = new LdtkReader(this,this.cache.json.get('start'));
+        let reader = new LdtkReader(this,this.cache.json.get(C.LDTK_NAME));
         reader.ldtk.levels.forEach(element => {
             let ld = new LevelData();
             ld.LevelID = element.identifier;

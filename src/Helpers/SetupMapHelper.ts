@@ -1,7 +1,6 @@
 import { forEachLeadingCommentRange } from "typescript";
 import { C } from "../C";
 import { Cutscene } from "../Cutscenes/Cutscene";
-import { GoblinNinjaCutscene } from "../Cutscenes/GoblinNinjaCutscene";
 import { EnemyTypes } from "../enums/EnemyTypes";
 import { MapObjects } from "../Map/MapObjects";
 import { LevelScene } from "../scenes/LevelScene";
@@ -9,6 +8,7 @@ import { EntityInstance, LDtkMapPack } from "../Map/LDtkReader";
 import { Entity } from "../Entities/Entity";
 import { Powerup } from "../Entities/Powerup";
 import { Customer } from "../Entities/Customer";
+import { Truck } from "../Entities/Truck";
 
 export class SetupMapHelper {
     static CurrentCollider:Phaser.Physics.Arcade.Collider;
@@ -48,14 +48,15 @@ export class SetupMapHelper {
                     // mo.mapEntities.push(cust);
                 break;
                 case 'PlayerStart':
-                    let truck = gs.add.image(0,0, 'atlas', 'pizzatruck_0');
-                    truck.setPosition(worldposition.x, worldposition.y+8);
-                    gs.Midground.add(truck);
+                    let truck = new Truck(gs);
+                    truck.sprite.setPosition(worldposition.x, worldposition.y+8);
+                    gs.RespawnPoint.set(worldposition.x + 10, worldposition.y+10);
+                    gs.Midground.add(truck.sprite);
                     // mo.mapEntities.push(cust);
                 break;
                 case 'Text':
                         let message = element.fieldInstances[0];
-                        let t = gs.add.bitmapText(worldposition.x, worldposition.y, '8px', message.__value as string)
+                        let t = gs.add.bitmapText(worldposition.x, worldposition.y, 'pixel', message.__value as string)
                         .setMaxWidth(element.width).setDepth(150).setCenterAlign();
                 break;
                 case 'Tree':
