@@ -58,7 +58,8 @@ export class MM extends Entity {
 
     LevelCompleted() {
         this.PlayAnimation('win');
-        this.changeFSM('dead');
+        this.changeFSM('nothing');
+        // this.changeFSM('dead');
     }
 
 
