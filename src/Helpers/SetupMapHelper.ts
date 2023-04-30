@@ -31,12 +31,33 @@ export class SetupMapHelper {
         gs.lights.enable();
 
         this.CreateEntities(gs, maps, mo);
+
+        this.CreateBackGround(gs, maps, mo);
         // this.CreatePhysics(gs,maps);
 
         //Create the background
 
         return mo;
     }
+    static CreateBackGround(gs: LevelScene, maps: LDtkMapPack, mo: MapObjects) {
+        let bgtype = maps.level.fieldInstances[4].__value;
+        switch (bgtype) {
+            case 'Trees':
+                let tbg1 = gs.add.tileSprite(0,0, 400,240, 'atlas', 'Bg_Trees_1').setScrollFactor(0,0).setOrigin(0,0);
+                let tbg2 = gs.add.tileSprite(0,0, 400,240, 'atlas', 'Bg_Trees_0').setScrollFactor(0,0).setOrigin(0,0);
+                gs.Background.add(tbg1);
+                gs.Background.add(tbg2);
+                gs.events.on('preupdate', () =>{
+                    tbg1.tilePositionX = gs.cameras.main.scrollX /3;
+                    tbg2.tilePositionX = gs.cameras.main.scrollX /2;
+            }, this);
+
+            break;
+        }
+
+
+    }
+
     static CreateEntities(gs: LevelScene, maps: LDtkMapPack, mo:MapObjects) {
         maps.entityLayers.entityInstances.forEach(element => {
             let worldposition = {x:element.px[0] + maps.worldX, y:element.px[1] + maps.worldY};

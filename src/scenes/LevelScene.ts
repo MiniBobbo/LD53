@@ -145,9 +145,11 @@ export class LevelScene extends Phaser.Scene {
         this.cameras.main.startFollow(this.mm.sprite);
 
         SetupMapHelper.CreateEntities(this, this.currentMapPack, this.CurrentMapObjects);
+
         this.BG = this.add.tileSprite(0,0,400,240, 'atlas', 'skybg_0')
         .setOrigin(0,0).setScrollFactor(0,0);
         this.Background.add(this.BG);
+        SetupMapHelper.CreateBackGround(this, this.currentMapPack, this.CurrentMapObjects);
 
 
         //@ts-ignore

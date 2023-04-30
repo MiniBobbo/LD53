@@ -59,6 +59,7 @@ export class MM extends Entity {
     LevelCompleted() {
         this.PlayAnimation('win');
         this.changeFSM('nothing');
+        this.sprite.setVelocityX(0);
         // this.changeFSM('dead');
     }
 
@@ -71,7 +72,6 @@ export class MM extends Entity {
 
 
     changeFSM(nextFSM:string) {
-        console.log(`Changing to ${nextFSM}`);
         this.fsm.changeModule(nextFSM);
     }
 
@@ -89,7 +89,6 @@ export class MM extends Entity {
 
     PlayAnimation(anim: string, ignoreIfPlaying?: boolean): void {
         super.PlayAnimation(anim, ignoreIfPlaying);
-        console.log(`Changing to ${anim}`);
 
     }
 
