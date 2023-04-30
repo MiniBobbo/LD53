@@ -8,7 +8,7 @@ export enum SceneMessages {
     LevelComplete = 'levelcomplete',
     ReheatPizza = 'reheat',
     RespawnPlayer='respawn',
-
+    PlayerHitSpikes = 'playerspiked',
     //MenuScene
     LevelSelected = 'levelselected',
     EnableButttons = 'enablebuttons',

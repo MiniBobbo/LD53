@@ -9,6 +9,8 @@ import { Entity } from "../Entities/Entity";
 import { Powerup } from "../Entities/Powerup";
 import { Customer } from "../Entities/Customer";
 import { Truck } from "../Entities/Truck";
+import { D } from "../enums/D";
+import { Spikes } from "../Entities/Enemies/Spikes";
 
 export class SetupMapHelper {
     static CurrentCollider:Phaser.Physics.Arcade.Collider;
@@ -87,6 +89,31 @@ export class SetupMapHelper {
                         .setOrigin(0,0);
                         gs.Midground.add(tree);
                 break;
+                case 'Spikes':
+                    var direction = element.fieldInstances.find(e=>e.__identifier == 'D');
+                    let d:D = D[direction.__value as string];
+                    let spike = new Spikes(gs, d);
+                    switch (d) {
+                        case D.D:
+                            spike.sprite.setPosition(worldposition.x+3,worldposition.y+5);
+                            break;
+                        case D.U:
+                            spike.sprite.setPosition(worldposition.x+3,worldposition.y+4);
+                            break;
+                        case D.L:
+                            spike.sprite.setPosition(worldposition.x+4,worldposition.y+6);
+                            break;
+                        case D.R:
+                            spike.sprite.setPosition(worldposition.x+5,worldposition.y+6);
+                            break;
+                        default:
+                            spike.sprite.setPosition(worldposition.x,worldposition.y);
+                            break;
+                    }
+
+                    gs.Midground.add(spike.sprite);
+                    break;
+
                 case 'Enemy':
                     let type = element.fieldInstances[0].__value as EnemyTypes;
                     switch (type) {

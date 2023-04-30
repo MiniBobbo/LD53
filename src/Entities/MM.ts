@@ -67,8 +67,7 @@ export class MM extends Entity {
 
 
     HitByAttack(a:AI): void {
-        a.dead();
-        this.sprite.emit(EntityMessages.TAKE_DAMAGE, a.damage);
+        this.Dead();
     }
 
 

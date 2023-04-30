@@ -11,7 +11,7 @@
 	"iid": "52dcf970-9f30-11ed-9c27-7366e718d1b6",
 	"jsonVersion": "1.3.0",
 	"appBuildId": 467368,
-	"nextUid": 409,
+	"nextUid": 410,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -1290,8 +1290,8 @@
 			"doc": "Spikes",
 			"width": 10,
 			"height": 10,
-			"resizableX": true,
-			"resizableY": true,
+			"resizableX": false,
+			"resizableY": false,
 			"keepAspectRatio": false,
 			"tileOpacity": 1,
 			"fillOpacity": 1,
@@ -1311,10 +1311,10 @@
 			"pivotY": 0,
 			"fieldDefs": [
 				{
-					"identifier": "Direction",
+					"identifier": "D",
 					"doc": null,
-					"__type": "LocalEnum.Direction",
-					"uid": 407,
+					"__type": "LocalEnum.D",
+					"uid": 409,
 					"type": "F_Enum(406)",
 					"isArray": false,
 					"canBeNull": false,
@@ -1421,7 +1421,7 @@
 			{ "id": "Trees", "tileRect": null, "tileId": -1, "color": 12470831, "__tileSrcRect": null },
 			{ "id": "None", "tileRect": null, "tileId": -1, "color": 16382457, "__tileSrcRect": null }
 		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] },
-		{ "identifier": "Direction", "uid": 406, "values": [
+		{ "identifier": "D", "uid": 406, "values": [
 			{ "id": "U", "tileRect": null, "tileId": -1, "color": 12470831, "__tileSrcRect": null },
 			{ "id": "D", "tileRect": null, "tileId": -1, "color": 14120515, "__tileSrcRect": null },
 			{ "id": "L", "tileRect": null, "tileId": -1, "color": 15389866, "__tileSrcRect": null },
@@ -1668,7 +1668,10 @@
 					"id": "V_String",
 					"params": ["Trees"]
 				}] },
-				{ "__identifier": "Description", "__type": "String", "__value": null, "__tile": null, "defUid": 408, "realEditorValues": [] }
+				{ "__identifier": "Description", "__type": "String", "__value": "This is pretty simple.", "__tile": null, "defUid": 408, "realEditorValues": [{
+					"id": "V_String",
+					"params": ["This is pretty simple."]
+				}] }
 			],
 			"layerInstances": [
 				{
@@ -2546,7 +2549,10 @@
 					"id": "V_String",
 					"params": ["Trees"]
 				}] },
-				{ "__identifier": "Description", "__type": "String", "__value": null, "__tile": null, "defUid": 408, "realEditorValues": [] }
+				{ "__identifier": "Description", "__type": "String", "__value": "Good thing I like exercise!", "__tile": null, "defUid": 408, "realEditorValues": [{
+					"id": "V_String",
+					"params": ["Good thing I like exercise!"]
+				}] }
 			],
 			"layerInstances": [
 				{
@@ -3848,7 +3854,10 @@
 					"id": "V_String",
 					"params": ["Trees"]
 				}] },
-				{ "__identifier": "Description", "__type": "String", "__value": null, "__tile": null, "defUid": 408, "realEditorValues": [] }
+				{ "__identifier": "Description", "__type": "String", "__value": "I'm not paid enough for this...", "__tile": null, "defUid": 408, "realEditorValues": [{
+					"id": "V_String",
+					"params": ["I'm not paid enough for this..."]
+				}] }
 			],
 			"layerInstances": [
 				{
@@ -4355,7 +4364,10 @@
 				{ "__identifier": "ambientB", "__type": "Float", "__value": 1, "__tile": null, "defUid": 129, "realEditorValues": [] },
 				{ "__identifier": "Area_Name", "__type": "String", "__value": null, "__tile": null, "defUid": 141, "realEditorValues": [] },
 				{ "__identifier": "BGType", "__type": "LocalEnum.BGType", "__value": "None", "__tile": null, "defUid": 400, "realEditorValues": [] },
-				{ "__identifier": "Description", "__type": "String", "__value": null, "__tile": null, "defUid": 408, "realEditorValues": [] }
+				{ "__identifier": "Description", "__type": "String", "__value": "Why would you set up spikes and then order a pizza?  This doesn't make any sense.", "__tile": null, "defUid": 408, "realEditorValues": [{
+					"id": "V_String",
+					"params": ["Why would you set up spikes and then order a pizza?  This doesn't make any sense."]
+				}] }
 			],
 			"layerInstances": [
 				{
@@ -4437,17 +4449,136 @@
 						},
 						{
 							"__identifier": "Spikes",
-							"__grid": [14,17],
+							"__grid": [15,17],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#EAD4AA",
 							"iid": "97835d00-c640-11ed-8ed9-5969c7e37b7a",
-							"width": 40,
+							"width": 10,
+							"height": 10,
+							"defUid": 403,
+							"px": [150,170],
+							"fieldInstances": [{ "__identifier": "D", "__type": "LocalEnum.D", "__value": "U", "__tile": null, "defUid": 409, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["U"]
+							}] }]
+						},
+						{
+							"__identifier": "Spikes",
+							"__grid": [14,17],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#EAD4AA",
+							"iid": "decdc300-c640-11ed-8ed9-91b96422feb3",
+							"width": 10,
 							"height": 10,
 							"defUid": 403,
 							"px": [140,170],
-							"fieldInstances": [{ "__identifier": "Direction", "__type": "LocalEnum.Direction", "__value": "U", "__tile": null, "defUid": 407, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "D", "__type": "LocalEnum.D", "__value": "U", "__tile": null, "defUid": 409, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["U"]
+							}] }]
+						},
+						{
+							"__identifier": "Spikes",
+							"__grid": [16,17],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#EAD4AA",
+							"iid": "df6a2a10-c640-11ed-8ed9-23f5a8a2716a",
+							"width": 10,
+							"height": 10,
+							"defUid": 403,
+							"px": [160,170],
+							"fieldInstances": [{ "__identifier": "D", "__type": "LocalEnum.D", "__value": "U", "__tile": null, "defUid": 409, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["U"]
+							}] }]
+						},
+						{
+							"__identifier": "Spikes",
+							"__grid": [17,17],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#EAD4AA",
+							"iid": "dfa9cb20-c640-11ed-8ed9-ebc8f3b10cf6",
+							"width": 10,
+							"height": 10,
+							"defUid": 403,
+							"px": [170,170],
+							"fieldInstances": [{ "__identifier": "D", "__type": "LocalEnum.D", "__value": "U", "__tile": null, "defUid": 409, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["U"]
+							}] }]
+						},
+						{
+							"__identifier": "Customer",
+							"__grid": [28,15],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"iid": "b69f3e30-c640-11ed-8ed9-6d77d6c5d3a9",
+							"width": 20,
+							"height": 20,
+							"defUid": 288,
+							"px": [280,150],
+							"fieldInstances": []
+						},
+						{
+							"__identifier": "Spikes",
+							"__grid": [4,12],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#EAD4AA",
+							"iid": "cf03bff0-c640-11ed-8ed9-bd022c15766f",
+							"width": 10,
+							"height": 10,
+							"defUid": 403,
+							"px": [40,120],
+							"fieldInstances": [{ "__identifier": "D", "__type": "LocalEnum.D", "__value": "R", "__tile": null, "defUid": 409, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["R"]
+							}] }]
+						},
+						{
+							"__identifier": "Spikes",
+							"__grid": [3,7],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#EAD4AA",
+							"iid": "d47555c0-c640-11ed-8ed9-1d343effc062",
+							"width": 10,
+							"height": 10,
+							"defUid": 403,
+							"px": [30,70],
+							"fieldInstances": [{ "__identifier": "D", "__type": "LocalEnum.D", "__value": "L", "__tile": null, "defUid": 409, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["L"]
+							}] }]
+						},
+						{
+							"__identifier": "Spikes",
+							"__grid": [6,10],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#EAD4AA",
+							"iid": "d6891a90-c640-11ed-8ed9-b5028afd6d58",
+							"width": 10,
+							"height": 10,
+							"defUid": 403,
+							"px": [60,100],
+							"fieldInstances": [{ "__identifier": "D", "__type": "LocalEnum.D", "__value": "D", "__tile": null, "defUid": 409, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["D"]
+							}] }]
 						}
 					]
 				},
