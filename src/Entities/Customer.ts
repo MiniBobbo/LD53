@@ -35,7 +35,7 @@ export class Customer extends Entity {
 
         this.delivered = true;
         this.sprite.alpha = .5;
-        this.scene.events.emit(SceneMessages.AddTip, this.tipAmount);
+        this.scene.events.emit(SceneMessages.AddTip, this.tipAmount * this.scene.PizzaHeatTipMultiplier);
         this.scene.events.emit(SceneMessages.DeliverPizza);
 
     }

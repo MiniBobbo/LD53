@@ -17,6 +17,7 @@ import { IH, IHVI } from "../IH/IH";
 import { LDtkMapPack, LdtkReader, Level } from "../Map/LDtkReader";
 import { MapObjects } from "../Map/MapObjects";
 import { WinScreen } from "../gui/WinScreen";
+import { PizzaHeat } from "../gui/PizzaHeat";
 
 export class LevelScene extends Phaser.Scene {
     player!:Entity;
@@ -60,10 +61,14 @@ export class LevelScene extends Phaser.Scene {
     LevelComplete:boolean = false;
     LevelTimer:number = 0;
     LevelName:string;
+    TipGUI:Tips;
+
+    PizzaHeatTipMultiplier:number = 2;
+    TipText:Phaser.GameObjects.Text;
 
 
     create(data:{LevelName:string}) {
-        this.LevelName = this.LevelName;
+        this.LevelName = data.LevelName;
         this.CollideMap = this.physics.add.group();
         this.CollidePlayer = this.physics.add.group();
         this.CollideEnemy = this.physics.add.group();
@@ -138,6 +143,9 @@ export class LevelScene extends Phaser.Scene {
         this.cameras.main.startFollow(this.mm.sprite);
 
         SetupMapHelper.CreateEntities(this, this.currentMapPack, this.CurrentMapObjects);
+        this.BG = this.add.tileSprite(0,0,400,240, 'atlas', 'skybg_0')
+        .setOrigin(0,0).setScrollFactor(0,0);
+        this.Background.add(this.BG);
 
 
         //@ts-ignore
@@ -166,8 +174,13 @@ export class LevelScene extends Phaser.Scene {
         });
 
         //Add gui stuff
+        this.TipGUI = new Tips(this);
         this.GuiLayer.add(new LevelTimer(this).t);
-        this.GuiLayer.add(new Tips(this).t);
+        this.GuiLayer.add(this.TipGUI.t);
+        this.GuiLayer.add(new PizzaHeat(this).c.setPosition(0,220));
+        this.TipText = this.add.text(0,0, '').setScrollFactor(0,0).setTint(0xff0000).setFontSize(12);
+
+        this.GuiLayer.add(this.TipText);
 
         this.CreateEvents();
         //Debug stuff
@@ -190,7 +203,7 @@ export class LevelScene extends Phaser.Scene {
         }
 
         this.LevelTimer += dt;
-        this.events.emit(SceneMessages.UpdateTime, this.LevelTimer/1000);
+        this.events.emit(SceneMessages.UpdateTime, dt);
 
         if(this.ih.IsJustPressed(IHVI.Pause)) {
             if(this.physics.world.isPaused)
@@ -201,11 +214,12 @@ export class LevelScene extends Phaser.Scene {
             return;
         }
 
-        if(this.ih.IsJustPressed(IHVI.Test)) {
+        if(this.ih.IsJustPressed(IHVI.Jump) && this.LevelComplete) {
             // this.events.emit('effect', {x:this.mm.sprite.body.x, y:this.mm.sprite.body.y, right:this.mm.Facing == FacingEnum.Right}, EffectTypes.Poof);
 
         }
 
+        this.BG.tilePositionX = this.cameras.main.scrollX /5;
 
         this.physics.collide(this.CollideMap, this.currentMapPack.collideLayer);
         // let bounds = this.cameras.main.getBounds();
@@ -226,17 +240,25 @@ export class LevelScene extends Phaser.Scene {
         this.LevelComplete = true;
         this.events.emit(SceneMessages.LevelComplete);
         console.log('Level Complete!');
+        let gd = C.gd;
+
+        let newrecord = false;
 
         if(C.gd.Levels != null) {
-            let ld = C.gd.Levels.find(e=>e.LevelName == this.LevelName);
+            let ld = C.gd.Levels.find(e=>e.LevelID == this.LevelName);
             if(ld === undefined) {
                 console.log('Unable to load level data from C.gd.  Check this.');
             } else {
-    
+                ld.Complete = true;
+                if(ld.Tip < this.TipGUI.currentTip) {
+                    newrecord = true;
+                    ld.Tip = this.TipGUI.currentTip;
+                }
             }
     
         }
 
+        C.SaveGame();
         let ws = new WinScreen(this);
         this.GuiLayer.add(ws.c);
 
@@ -255,6 +277,10 @@ export class LevelScene extends Phaser.Scene {
         this.customEvents.push('effect');
         this.events.on(EntityMessages.PLAYER_DEAD, this.PlayerDead, this);
         this.events.on(SceneMessages.DeliverPizza, this.DeliveredPizza, this);
+        this.events.on(SceneMessages.SetTipMult, (tip:number) => {
+            tip = Phaser.Math.RoundTo(tip, -2);
+            this.PizzaHeatTipMultiplier = tip; 
+            this.TipText.text = tip + "";}, this);
 
     }
 

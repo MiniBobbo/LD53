@@ -67,10 +67,12 @@ export class Preload extends Phaser.Scene {
         }, this);
     
         this.load.setBaseURL('./assets/')
+        this.load.bitmapFont('emu', '8ptfont_0.png', '8ptfont.fnt');
         this.load.bitmapFont('6px', 'munro_0.png', 'munro.fnt');
-        this.load.bitmapFont('8px', 'smallfont_0.png', 'smallfont.fnt');
+        this.load.bitmapFont('small', 'smallfont_0.png', 'smallfont.fnt');
         this.load.image('box', '9box.png');
         this.load.image('tiles', 'Tiles.png');
+        this.load.image('pizza', 'bigpizza.png');
         // this.load.bitmapFont('8px', '8ptfont_0.png', '8ptfont.fnt');
         this.load.multiatlas('atlas', 'atlas.json');
         this.load.json('start', 'start.ldtk');

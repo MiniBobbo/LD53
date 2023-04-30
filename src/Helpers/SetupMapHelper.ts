@@ -33,6 +33,8 @@ export class SetupMapHelper {
         this.CreateEntities(gs, maps, mo);
         // this.CreatePhysics(gs,maps);
 
+        //Create the background
+
         return mo;
     }
     static CreateEntities(gs: LevelScene, maps: LDtkMapPack, mo:MapObjects) {
@@ -45,11 +47,21 @@ export class SetupMapHelper {
                     gs.TotalCustomers++;
                     // mo.mapEntities.push(cust);
                 break;
+                case 'PlayerStart':
+                    let truck = gs.add.image(0,0, 'atlas', 'pizzatruck_0');
+                    truck.setPosition(worldposition.x, worldposition.y+8);
+                    gs.Midground.add(truck);
+                    // mo.mapEntities.push(cust);
+                break;
                 case 'Text':
                         let message = element.fieldInstances[0];
                         let t = gs.add.bitmapText(worldposition.x, worldposition.y, '8px', message.__value as string)
                         .setMaxWidth(element.width).setDepth(150).setCenterAlign();
-                        mo.mapGameObjects.push(t);
+                break;
+                case 'Tree':
+                        let tree = gs.add.image(worldposition.x, worldposition.y + 13, 'atlas', 'tree')
+                        .setOrigin(0,0);
+                        gs.Midground.add(tree);
                 break;
                 case 'Enemy':
                     let type = element.fieldInstances[0].__value as EnemyTypes;

@@ -11,7 +11,6 @@ import { LevelData } from "../Models/LevelData";
 
 export class MainMenuScene extends Phaser.Scene {
     Title:Phaser.GameObjects.Text;
-    StartButton:Phaser.GameObjects.Container;
     EraseButton:Phaser.GameObjects.Container;
     ih:IH;
     Icon:Phaser.GameObjects.Image;
@@ -26,6 +25,10 @@ export class MainMenuScene extends Phaser.Scene {
         if(this.FirstTime)
             this.Init();
         this.scene.remove('level');
+        let ts = this.add.tileSprite(0,0,400,240,'atlas', 'skybg_0').setOrigin(0,0);
+        this.events.on('update', ()=>{ts.tilePositionX -= 1}, this);
+        this.add.image(0,0,'atlas', 'MainBG').setOrigin(0,0);
+        this.add.image(200,60, 'atlas', 'pizzalogo');
 
 
         // this.add.nineslice(20,20, 'box', null, 100,100,10,10,10,10).setOrigin(0,0);
@@ -37,23 +40,12 @@ export class MainMenuScene extends Phaser.Scene {
         this.cameras.main.setBackgroundColor(0x444444);
         // this.cameras.main.setBackgroundColor(0xff00ff);
 
-        this.Title = this.add.text(120,30, 'Parkor Pizza').setFontSize(20).setWordWrapWidth(240).setOrigin(.5,0);
-        this.add.text(120,50, 'No roads?  No problem!').setFontSize(10).setWordWrapWidth(240).setOrigin(.5,0);
         // this.StartButton = this.CreateButton('Start Game', this.StartGame).setPosition(30,50);
-        this.EraseButton = this.CreateButton('Erase Saved Data', this.EraseSaves).setPosition(200,200);
+        this.EraseButton = this.CreateButton('Clear\nSaved Data', this.EraseSaves).setPosition(340,220);
 
-        let l1 = new LevelIcons(this);
-        l1.SetData('Level_0', false, 0);
-        l1.SetPosition(100,60);
-        this.Levels.push(l1);
-        let l2 = new LevelIcons(this);
-        l2.SetData('Level_1', false, 0);
-        l2.SetPosition(100,90);
-        this.Levels.push(l2);
-        let l3 = new LevelIcons(this);
-        l3.SetData('Level_2', false, 0);
-        l3.SetPosition(100,120);
-        this.Levels.push(l3);
+
+        this.CreateLevels();
+        
 
         //Select the first icon
         this.SelectLevel(0);
@@ -61,15 +53,25 @@ export class MainMenuScene extends Phaser.Scene {
 
 
     }
+    CreateLevels() {
+        this.Levels.forEach(l=>l.Destroy());
+        let gd = C.gd;
+        let count = 0;
+        let hright
+        gd.Levels.forEach(element => {
+            let li = new LevelIcons(this);
+            li.SetData(element.LevelName, element.LevelID, element.Complete, element.Tip);
+            li.SetPosition(30, 60 + 30*count);
+            this.Levels.push(li);
+            count++;
+        });
+    }
 
     Init() {
-        let gamedata = C.gd;
-        if(C.gd == null) {
-            C.gd = JSON.parse(localStorage.getItem(C.GAME_NAME));
-        }
-
-
-
+        C.gd = JSON.parse(localStorage.getItem(C.GAME_NAME));
+        let gd = C.gd;
+        if(C.gd == null)
+            this.CreateGameData();
         this.FirstTime = false;
         this.events.on(SceneMessages.LevelSelected, this.StartGame, this);
 
@@ -96,15 +98,16 @@ export class MainMenuScene extends Phaser.Scene {
         this.cameras.main.fadeOut(1000, 0,0,0);
         this.scene.add('level', LevelScene, false);
         this.cameras.main.once('camerafadeoutcomplete', () =>{ 
-            this.scene.start('level', {LevelName:this.LevelSelected.LevelName});
+            this.scene.start('level', {LevelName:this.LevelSelected.LevelID});
             // this.scene.start('level', {LevelName:'Level_0'});
             // this.scene.start('level', 'test');
         })
     }
 
     EraseSaves(p:Phaser.Input.Pointer, localx:number, localy:number, event:Phaser.Types.Input.EventData) {
-        console.log('Erase Saved Data Button Pressed');
-        localStorage.setItem(C.GAME_NAME, JSON.stringify(C.gd));
+        this.CreateGameData();
+        this.CreateLevels();
+        // localStorage.setItem(C.GAME_NAME, JSON.stringify(C.gd));
     }
 
     update(time:number, dt:number) {
@@ -117,11 +120,12 @@ export class MainMenuScene extends Phaser.Scene {
         if(this.ih.IsJustPressed(IHVI.Jump) && !this.Selecting) {
             this.StartGame();
         }
+
     }
 
     CreateButton(text:string, callback:any):Phaser.GameObjects.Container {
         let c = this.add.container();
-        let t = this.add.text(0,0,text).setInteractive();
+        let t = this.add.bitmapText(0,0,'small', text).setInteractive().setCenterAlign().setTint(0xff0000);
         t.on('pointerdown', callback, this);
         c.add(t);
         return c;
@@ -133,10 +137,20 @@ export class MainMenuScene extends Phaser.Scene {
         let reader = new LdtkReader(this,this.cache.json.get('start'));
         reader.ldtk.levels.forEach(element => {
             let ld = new LevelData();
-            ld.LevelName = element.identifier;
+            ld.LevelID = element.identifier;
+            ld.LevelName = element.fieldInstances[3].__value;
+            if(ld.LevelName == null)
+                ld.LevelName = ld.LevelID;
             ld.Complete = false;
             ld.Tip = 0;
+            gd.Levels.push(ld);
         }); 
+
+        localStorage.setItem(C.GAME_NAME, JSON.stringify(gd));
+        C.gd = gd;
+
+
+
 
     }
 }

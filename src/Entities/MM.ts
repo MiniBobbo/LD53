@@ -112,9 +112,9 @@ export class MM extends Entity {
     }
     static CreateAnims(scene:Phaser.Scene) {
         scene.anims.create({ key: 'player_stand', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_stand_', end: 0}), repeat: 0});
-        scene.anims.create({ key: 'player_run', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_run_', end: 0}), repeat: 0});
-        scene.anims.create({ key: 'player_jump', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_jumpup_', end: 0}), repeat: 0});
-        scene.anims.create({ key: 'player_jumpdown', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_jumpdown_', end: 0}), repeat: 0});
+        scene.anims.create({ key: 'player_run', frameRate: 12, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_run_', end: 7}), repeat: -1});
+        scene.anims.create({ key: 'player_jump', frameRate: 12, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_jumpup_', end: 2}), repeat: 0});
+        scene.anims.create({ key: 'player_jumpdown', frameRate: 12, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_jumpdown_', end: 2}), repeat: 0});
         scene.anims.create({ key: 'player_wall', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_wall_', end: 0}), repeat: 0});
         scene.anims.create({ key: 'player_walljump', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_walljump_', end: 0}), repeat: 0});
         scene.anims.create({ key: 'player_win', frameRate: 60, frames: scene.anims.generateFrameNames('atlas', { prefix: 'player_win_', end: 0}), repeat: 0});

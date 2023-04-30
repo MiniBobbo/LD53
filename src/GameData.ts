@@ -4,6 +4,6 @@ import { LevelData } from "./Models/LevelData";
 export class GameData {
     Levels:LevelData[];
     constructor() {
-        
+        this.Levels = [];
     }
 }

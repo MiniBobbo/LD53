@@ -1,7 +1,7 @@
 import { GameData } from "./GameData";
 
 export class C {
-    static GAME_NAME = 'InitialGame';
+    static GAME_NAME = 'ParkourPizza';
     static gd:GameData;
 
     static LevelName = 'Getting Started';
@@ -23,6 +23,12 @@ export class C {
     static LONG_FLASH:number = 1500;
     static SHORT_FLASH:number = 200;
 
+    static PIZZA_HEAT_TIME:number = 120000;
+
     //Default Player Values
+
+    static SaveGame() {
+        localStorage.setItem(C.GAME_NAME, JSON.stringify(C.gd));  
+    }
 
 }

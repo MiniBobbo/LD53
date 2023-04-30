@@ -21,7 +21,8 @@ export class MMFallFSM extends FSMModule {
     }
 
     update(dt:number) {
-        this.mm.PlayAnimation('jumpdown',true);
+        if(this.mm.sprite.body.velocity.y > 0)
+            this.mm.PlayAnimation('jumpdown',true);
 
         this.timer += dt;
         let input = this.mm.ih;

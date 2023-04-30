@@ -7,7 +7,7 @@ export class Tips {
 
 
     constructor(scene:Phaser.Scene) {
-        this.t = scene.add.text(10,20, '$0').setFontSize(12).setScrollFactor(0,0);
+        this.t = scene.add.text(10,22, '$0').setFontSize(12).setScrollFactor(0,0);
         scene.events.on(SceneMessages.AddTip, this.AddTip, this)
         
     }

@@ -3,8 +3,10 @@ export enum SceneMessages {
     Talk = 'talk',
     UpdateTime = 'updatetime',
     DeliverPizza = 'deliverpizza',
+    SetTipMult = 'settip',
     AddTip = 'tip',
     LevelComplete = 'levelcomplete',
+    ReheatPizza = 'reheat',
 
     //MenuScene
     LevelSelected = 'levelselected',
