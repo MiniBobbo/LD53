@@ -2,12 +2,12 @@ import { SceneMessages } from "../enums/SceneMessages";
 
 export class Tips {
     // scene:Phaser.Scene;
-    t:Phaser.GameObjects.Text;
+    t:Phaser.GameObjects.BitmapText;
     currentTip:number = 0;
 
 
     constructor(scene:Phaser.Scene) {
-        this.t = scene.add.text(10,22, '$0').setFontSize(12).setScrollFactor(0,0);
+        this.t = scene.add.bitmapText(10,10, 'pixel', 'Tips earned: $0').setScrollFactor(0,0);
         scene.events.on(SceneMessages.AddTip, this.AddTip, this)
         
     }
@@ -15,7 +15,7 @@ export class Tips {
 
     AddTip(addTip:number) {
         this.currentTip += addTip;
-        this.t.setText("$" + Phaser.Math.RoundTo(this.currentTip, 0) );
+        this.t.setText("Tips earned: $" + Phaser.Math.RoundTo(this.currentTip, 0) );
     }
 
 }

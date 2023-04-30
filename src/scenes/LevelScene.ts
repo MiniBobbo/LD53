@@ -183,12 +183,12 @@ export class LevelScene extends Phaser.Scene {
 
         //Add gui stuff
         this.TipGUI = new Tips(this);
-        this.GuiLayer.add(new LevelTimer(this).t);
+        // this.GuiLayer.add(new LevelTimer(this).t);
         this.GuiLayer.add(this.TipGUI.t);
         this.GuiLayer.add(new PizzaHeat(this).c.setPosition(0,0));
-        this.TipText = this.add.text(0,0, '').setScrollFactor(0,0).setTint(0xff0000).setFontSize(12);
+        // this.TipText = this.add.text(0,0, '').setScrollFactor(0,0).setTint(0xff0000).setFontSize(12);
 
-        this.GuiLayer.add(this.TipText);
+        // this.GuiLayer.add(this.TipText);
 
         this.CreateEvents();
         //Debug stuff
@@ -300,21 +300,23 @@ export class LevelScene extends Phaser.Scene {
         this.events.on(SceneMessages.SetTipMult, (tip:number) => {
             tip = Phaser.Math.RoundTo(tip, -2);
             this.PizzaHeatTipMultiplier = tip; 
-            this.TipText.text = tip + "";}, this);
+            // this.TipText.text = tip + "";
+        }, this);
 
     }
     PlayerRespawn() {
         this.mm.sprite.setPosition(this.RespawnPoint.x, this.RespawnPoint.y);
         this.mm.PlayAnimation('appear');
         this.cameras.main.flash();
-        let timeline = this.mm.scene.add.timeline([
-            {
-                at:500,
-                run: () => {this.mm.changeFSM('fall'); this.mm.PlayAnimation('jumpdown');}
-            }
+        this.mm.changeFSM('fall'); this.mm.PlayAnimation('jumpdown');
+        // let timeline = this.mm.scene.add.timeline([
+        //     {
+        //         at:500,
+        //         run: () => {this.mm.changeFSM('fall'); this.mm.PlayAnimation('jumpdown');}
+        //     }
 
-        ]);
-        timeline.play();
+        // ]);
+        // timeline.play();
 
     }
 
