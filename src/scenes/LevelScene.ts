@@ -65,6 +65,8 @@ export class LevelScene extends Phaser.Scene {
     LevelName:string;
     TipGUI:Tips;
 
+    private NextLevelDecision:boolean = false;
+
     PizzaHeatTipMultiplier:number = 2;
     TipText:Phaser.GameObjects.Text;
 
@@ -85,6 +87,8 @@ export class LevelScene extends Phaser.Scene {
         this.Foreground = this.add.layer().setDepth(4);
         this.Midground = this.add.layer().setDepth(3);
         this.Background = this.add.layer().setDepth(2);
+
+        this.NextLevelDecision = false;
 
         this.reader = new LdtkReader(this,this.cache.json.get(C.LDTK_NAME));
 
@@ -181,7 +185,7 @@ export class LevelScene extends Phaser.Scene {
         this.TipGUI = new Tips(this);
         this.GuiLayer.add(new LevelTimer(this).t);
         this.GuiLayer.add(this.TipGUI.t);
-        this.GuiLayer.add(new PizzaHeat(this).c.setPosition(0,220));
+        this.GuiLayer.add(new PizzaHeat(this).c.setPosition(0,0));
         this.TipText = this.add.text(0,0, '').setScrollFactor(0,0).setTint(0xff0000).setFontSize(12);
 
         this.GuiLayer.add(this.TipText);
@@ -229,7 +233,15 @@ export class LevelScene extends Phaser.Scene {
         // let bounds = this.cameras.main.getBounds();
 
         //End the level if we delivered all the pizzas.
-
+        if(this.NextLevelDecision) {
+            if(this.ih.IsJustPressed(IHVI.Jump)) {
+                this.cameras.main.fadeOut(500, 0,0,0,(can:any, progress:number) =>{ if(progress == 1) this.scene.start('menu');}, this);
+                this.NextLevelDecision = false;
+            } else if(this.ih.IsJustPressed(IHVI.Left)) {
+                this.cameras.main.fadeOut(500, 0,0,0,(can:any, progress:number) =>{ if(progress == 1) this.scene.start('reset', {LevelName:C.LevelName});}, this);
+                this.NextLevelDecision = false;
+            }
+        }
 
     }
     DeliveredPizza() {
@@ -243,7 +255,6 @@ export class LevelScene extends Phaser.Scene {
     LevelCompleted(){
         this.LevelComplete = true;
         this.events.emit(SceneMessages.LevelComplete);
-        console.log('Level Complete!');
         let gd = C.gd;
 
         let newrecord = false;
@@ -263,8 +274,13 @@ export class LevelScene extends Phaser.Scene {
         }
 
         C.SaveGame();
-        let ws = new WinScreen(this);
+        let ws = new WinScreen(this, this.TipGUI.currentTip, newrecord );
         this.GuiLayer.add(ws.c);
+
+        this.add.timeline({
+            in:500,
+            run:()=>{this.NextLevelDecision = true;}
+        }).play();
 
         
     }

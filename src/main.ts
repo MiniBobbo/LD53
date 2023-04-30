@@ -5,6 +5,7 @@ import { GameData } from "./GameData";
 import { MainMenuScene } from "./scenes/MainMenuScene";
 import MergedInput from "phaser3-merged-input";
 import { LevelScene } from "./scenes/LevelScene";
+import { ResetScene } from "./scenes/ResetScene";
 
 
 class Main extends Phaser.Game {
@@ -37,6 +38,7 @@ class Main extends Phaser.Game {
     this.scene.add("preload", Preload, false);
     this.scene.add("menu", MainMenuScene, false);
     this.scene.add('level', LevelScene, false);
+    this.scene.add('reset', ResetScene, false);
 
     // this.scene.add("level", LevelScene, false);
     this.scene.start("preload");

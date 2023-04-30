@@ -70,8 +70,8 @@ export class SetupMapHelper {
                 break;
                 case 'PlayerStart':
                     let truck = new Truck(gs);
-                    truck.sprite.setPosition(worldposition.x, worldposition.y+8);
-                    gs.RespawnPoint.set(worldposition.x + 10, worldposition.y+10);
+                    truck.sprite.setPosition(worldposition.x, worldposition.y+3);
+                    gs.RespawnPoint.set(worldposition.x + 10, worldposition.y);
                     gs.Midground.add(truck.sprite);
                     // mo.mapEntities.push(cust);
                 break;
@@ -79,6 +79,8 @@ export class SetupMapHelper {
                         let message = element.fieldInstances[0];
                         let t = gs.add.bitmapText(worldposition.x, worldposition.y, 'pixel', message.__value as string)
                         .setMaxWidth(element.width).setDepth(150).setCenterAlign();
+                        t.postFX.addGlow(0, 2,0);
+                        gs.Midground.add(t);
                 break;
                 case 'Tree':
                         let tree = gs.add.image(worldposition.x, worldposition.y + 13, 'atlas', 'tree')

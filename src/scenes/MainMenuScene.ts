@@ -80,13 +80,11 @@ export class MainMenuScene extends Phaser.Scene {
     }
 
     SelectLevel(index:number) {
-        console.log(`Trying for index ${index}`);
         if(index >= this.Levels.length) {
             index = 0;
         } else if (index < 0) {
             index = this.Levels.length -1;
         }
-        console.log(`Selecting ${index}`);
         this.LevelSelectedIndex = index;
 
         this.LevelSelected = this.Levels.at(index) as LevelIcons;
@@ -100,6 +98,7 @@ export class MainMenuScene extends Phaser.Scene {
         this.cameras.main.fadeOut(1000, 0,0,0);
         this.scene.add('level', LevelScene, false);
         this.cameras.main.once('camerafadeoutcomplete', () =>{ 
+            C.LevelName = this.LevelSelected.LevelID;
             this.scene.start('level', {LevelName:this.LevelSelected.LevelID});
             // this.scene.start('level', {LevelName:'Level_0'});
             // this.scene.start('level', 'test');
