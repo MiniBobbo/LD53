@@ -21,7 +21,7 @@ class Main extends Phaser.Game {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: true
+            // debug: true
         }
       },
       render: {

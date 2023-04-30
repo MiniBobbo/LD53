@@ -15,6 +15,8 @@ export class MainMenuScene extends Phaser.Scene {
     ih:IH;
     Icon:Phaser.GameObjects.Image;
 
+    Description:Phaser.GameObjects.BitmapText;
+
     Levels:LevelIcons[];
     LevelSelected:LevelIcons;
     LevelSelectedIndex:number = 0;
@@ -35,6 +37,8 @@ export class MainMenuScene extends Phaser.Scene {
 
         // this.add.nineslice(20,20, 'box', null, 100,100,10,10,10,10).setOrigin(0,0);
         this.Icon = this.add.image(-20,-20, 'atlas', 'icons_2');
+        this.Description = this.add.bitmapText(10, 110, 'pixel', '').setTint(0).setMaxWidth(200).setCenterAlign();
+        // this.Description.postFX.addGlow(0,1,0,false, .1, 2);
 
         this.Levels = [];
 
@@ -54,6 +58,7 @@ export class MainMenuScene extends Phaser.Scene {
         this.Selecting = false;
 
 
+
     }
     CreateLevels() {
         this.Levels.forEach(l=>l.Destroy());
@@ -62,7 +67,7 @@ export class MainMenuScene extends Phaser.Scene {
         let hright
         gd.Levels.forEach(element => {
             let li = new LevelIcons(this);
-            li.SetData(element.LevelName, element.LevelID, element.Complete, element.Tip);
+            li.SetData(element.LevelName, element.LevelID, element.Complete, element.Tip, element.Description);
             li.SetPosition(240, 5 + 30*count);
             this.Levels.push(li);
             count++;
@@ -72,7 +77,7 @@ export class MainMenuScene extends Phaser.Scene {
     Init() {
         C.gd = JSON.parse(localStorage.getItem(C.GAME_NAME));
         let gd = C.gd;
-        if(C.gd == null)
+        if(C.gd == null || gd.Levels.length == 0)
             this.CreateGameData();
         this.FirstTime = false;
         this.events.on(SceneMessages.LevelSelected, this.StartGame, this);
@@ -89,6 +94,7 @@ export class MainMenuScene extends Phaser.Scene {
 
         this.LevelSelected = this.Levels.at(index) as LevelIcons;
         this.Icon.setPosition(this.LevelSelected.IconLocation.x,this.LevelSelected.IconLocation.y );
+        this.Description.setText(this.LevelSelected.Description);
 
     }
 
@@ -140,6 +146,7 @@ export class MainMenuScene extends Phaser.Scene {
             let ld = new LevelData();
             ld.LevelID = element.identifier;
             ld.LevelName = element.fieldInstances[3].__value;
+            ld.Description = element.fieldInstances[5].__value;
             if(ld.LevelName == null)
                 ld.LevelName = ld.LevelID;
             ld.Complete = false;

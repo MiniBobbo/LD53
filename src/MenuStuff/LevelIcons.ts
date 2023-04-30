@@ -6,6 +6,7 @@ export class LevelIcons {
     LevelID:string;
     Tip:number = 0;
     Complete:boolean = false;
+    Description:string;
 
     //Graphics stuff
     c:Phaser.GameObjects.Container;
@@ -50,11 +51,12 @@ export class LevelIcons {
         this.scene.events.emit(SceneMessages.LevelSelected, this.LevelName);
     }
 
-    SetData(name:string, ID:string, complete:boolean, tip:number) {
+    SetData(name:string, ID:string, complete:boolean, tip:number, desc:string) {
         this.LevelName = name;
         this.Complete = complete;
         this.LevelID = ID;
         this.Tip = tip;
+        this.Description = desc;
         this.t.setText(`${this.LevelName}`);
         this.tip.setText(`$${this.Tip}`);
         if(this.Complete)
